@@ -9,7 +9,7 @@ This firmware turns the Pico into a standalone Wi-Fi access point and serves a b
 ## What this project does
 
 - Runs a **local Wi-Fi AP** named `picoled`
-- Hosts a **Web UI** at `http://192.168.4.1`
+- Hosts a **Web UI** (typically `http://192.168.4.1`; on some iPhones `http://192.168.42.1`)
 - Supports **manual color selection** (RGB + brightness)
 - Includes colorful animated presets:
   - Rainbow Flow
@@ -66,10 +66,15 @@ If your inline resistor is truly `470kΩ`, that is too high for WS2812 data sign
 1. Power the Pico with this firmware.
 2. On your phone/computer, join Wi-Fi network: `picoled`
 3. Open a browser to: `http://192.168.4.1`
+  - If that does not load (especially on iPhone), try: `http://192.168.42.1`
 4. Use the controls:
    - **Open Color Palette** -> choose color -> **Apply Manual Color**
    - Pick any preset in **Colorful Presets**
    - Use brightness slider at any time
+
+### Web UI preview
+
+![Pico Web UI](webui.png)
 
 ---
 
