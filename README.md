@@ -36,9 +36,9 @@ Use the wiring shown in:
 
 ### Data resistor note
 
-Your blue data cable already includes an inline resistor with heat shrink.
+In the example photo/build, the blue data cable includes an inline resistor with heat shrink.
 
-- Use it in series between `GP6` and LED `DIN`
+- For your own build, place a resistor in series between `GP6` and LED `DIN`
 - Typical value for WS2812 data protection is **330Ω to 470Ω**
 
 If your inline resistor is truly `470kΩ`, that is too high for WS2812 data signaling. In that case replace it with `330Ω` to `470Ω`.
@@ -56,7 +56,7 @@ If your inline resistor is truly `470kΩ`, that is too high for WS2812 data sign
 - 1x USB cable for Pico 2W (data capable)
 - 3x jumper wires (5V, GND, DATA)
 - 1x inline data resistor (330Ω to 470Ω)  
-  (already present in your blue wire)
+  (optional if your data wire already has one inline)
 - 1x electrolytic capacitor 470µF to 1000µF (recommended)
 
 ---
