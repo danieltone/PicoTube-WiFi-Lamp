@@ -72,9 +72,6 @@ If your inline resistor is truly `470kΩ`, that is too high for WS2812 data sign
    - Pick any preset in **Colorful Presets**
    - Use brightness slider at any time
 
-### Web UI preview
-
-![Pico Web UI](webui2.png)
 
 ---
 
