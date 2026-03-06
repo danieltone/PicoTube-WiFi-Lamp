@@ -74,7 +74,7 @@ If your inline resistor is truly `470kΩ`, that is too high for WS2812 data sign
 
 ### Web UI preview
 
-![Pico Web UI](webui.png)
+![Pico Web UI](webui-latest.png)
 
 ---
 
