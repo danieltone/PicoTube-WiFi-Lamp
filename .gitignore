@@ -1,1 +1,11 @@
-.pio
+.pio/
+.vscode/
+__pycache__/
+*.log
+*.tmp
+*.swp
+
+# Ignore generated UF2 files by default,
+# but keep the root release artifact tracked.
+*.uf2
+!firmware.uf2

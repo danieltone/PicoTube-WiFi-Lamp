@@ -1,129 +1,157 @@
-# Easy Does It: Arduino Nano + 1x8 RGB Beginner Project
+# PicoTube WiFi Lamp (Pico 2W + WS2812)
 
-This project teaches absolute beginners how to wire and program a microcontroller by animating a small RGB LED board.
+A tiny Wi-Fi controlled LED lamp project for Raspberry Pi Pico 2W.
 
-## What you will learn
+This firmware turns the Pico into a standalone Wi-Fi access point and serves a built-in web app so you can control a small WS2812/NeoPixel LED board from your phone, computer, or tablet.
 
-- What a microcontroller does
-- Why `5V`, `GND`, and a data pin are required
-- How addressable LEDs (WS2812/NeoPixel style) receive data
-- How to upload firmware to an Arduino Nano
-- How to adjust animation speed and brightness safely
+---
 
-## Project image (your labeled setup)
+## What this project does
 
-![Easy Does It wiring and parts layout](easydoesit.png)
+- Runs a **local Wi-Fi AP** named `picoled`
+- Hosts a **Web UI** at `http://192.168.4.1`
+- Supports **manual color selection** (RGB + brightness)
+- Includes colorful animated presets:
+  - Rainbow Flow
+  - Theater Chase
+  - Breathing White
+  - Classic Vacuum Tube Amber
+  - Candy Alternating
+  - Ocean Alternating
+- Supports **All Off** from the web page
 
-Your labels in the image:
-- **1** = resistor (data line protection)
-- **2** = Arduino Nano
-- **3** = 1x8 RGB board
+---
 
-## Detailed parts list
+## Wiring / solder points
 
-### Required parts
+Use the wiring shown in:
 
-| Qty | Part | Example / Spec | Why it is needed |
-|---:|---|---|---|
-| 1 | Arduino Nano (ATmega328P) | CH340 or FTDI USB version | Main microcontroller |
-| 1 | 1x8 addressable RGB board | WS2812B / NeoPixel type, pins `IN/OUT/VCC/GND` | 8 controllable LEDs |
-| 1 | USB cable for Nano | USB data cable (not charge-only) | Program + power the Nano |
-| 3-4 | Jumper wires | Male-male, or as needed for your board | Electrical connections |
+![Pico wiring diagram](picodiagram.png)
 
-### Strongly recommended parts
+### Signal and power connections
 
-| Qty | Part | Value / Spec | Why it helps |
-|---:|---|---|---|
-| 1 | Resistor (series on data) | `330Ω` to `470Ω` | Protects LED data input, reduces signal ringing |
-| 1 | Electrolytic capacitor | `1000µF`, `6.3V` or higher | Smooths power spikes on LED board |
+- Pico 2W `VBUS (5V)` -> LED board `VCC`
+- Pico 2W `GND` -> LED board `GND`
+- Pico 2W `GP6` (physical pin 9) -> LED board `DIN` / `IN`
 
-### Optional parts (nice for teaching)
+### Data resistor note
 
-| Qty | Part | Why useful |
-|---:|---|---|
-| 1 | Solderless breadboard | Cleaner layout for beginners |
-| 1 | Multimeter | Teaches voltage checks and debugging |
-| 1 | Pushbutton + 10k resistor | Future upgrade: switch animation modes |
+Your blue data cable already includes an inline resistor with heat shrink.
 
-## Wiring (Nano -> RGB board `IN` side)
+- Use it in series between `GP6` and LED `DIN`
+- Typical value for WS2812 data protection is **330Ω to 470Ω**
 
-Use the side of the RGB board labeled `IN`.
+If your inline resistor is truly `470kΩ`, that is too high for WS2812 data signaling. In that case replace it with `330Ω` to `470Ω`.
 
-- Nano `5V` -> RGB board `VCC`
-- Nano `GND` -> RGB board `GND`
-- Nano `D6` -> resistor -> RGB board `IN`
-- Leave the `OUT` side unconnected for this beginner build
+### Recommended stability parts
 
-Power note:
-- For this small 8-LED board, Nano USB power is fine at low brightness.
-- Keep brightness modest (this project uses `BRIGHTNESS = 40`).
+- 1x electrolytic capacitor, **470µF to 1000µF** (>= 6.3V), across LED `VCC`/`GND`
 
-## Code in this repo
+---
 
-- Arduino IDE sketch: `nano_rgb_test/nano_rgb_test.ino`
-- PlatformIO sketch: `src/main.cpp`
+## Parts list
 
-The current firmware runs:
-- Solid red/green/blue/white
-- Color wipe
-- Theater chase
-- Rainbow cycle
-- Breathing white
+- 1x Raspberry Pi Pico 2W
+- 1x WS2812/NeoPixel LED board (2x2 / 4 LEDs)
+- 1x USB cable for Pico 2W (data capable)
+- 3x jumper wires (5V, GND, DATA)
+- 1x inline data resistor (330Ω to 470Ω)  
+  (already present in your blue wire)
+- 1x electrolytic capacitor 470µF to 1000µF (recommended)
 
-## Arduino IDE upload steps (beginner route)
+---
 
-1. Install Arduino IDE.
-2. Open `nano_rgb_test/nano_rgb_test.ino`.
-3. Install library: **Adafruit NeoPixel**.
-4. Set:
-	 - `Tools > Board > Arduino Nano`
-	 - `Tools > Processor > ATmega328P`
-	 - If upload fails, switch to `ATmega328P (Old Bootloader)`
-	 - `Tools > Port` -> your Nano port (`/dev/ttyUSBx` on Linux)
-5. Click **Upload**.
+## Web UI usage (phone/computer)
 
-## PlatformIO upload steps (advanced beginner route)
+1. Power the Pico with this firmware.
+2. On your phone/computer, join Wi-Fi network: `picoled`
+3. Open a browser to: `http://192.168.4.1`
+4. Use the controls:
+   - **Open Color Palette** -> choose color -> **Apply Manual Color**
+   - Pick any preset in **Colorful Presets**
+   - Use brightness slider at any time
+
+---
+
+## Build and flash
+
+### Build firmware
 
 ```bash
-cd /home/kali/esp32-wroom32-mini
-pio run -e nanoatmega328 -t upload --upload-port /dev/ttyUSB1
+cd /home/kali/pico-rgb-tube
+pio run -e pico2w
 ```
 
-If your Nano uses new bootloader instead:
+### UF2 output
+
+```text
+.pio/build/pico2w/firmware.uf2
+```
+
+### Easy download file (no build needed)
+
+For users who only want to drag-and-drop firmware, this repository also includes:
+
+```text
+firmware.uf2
+```
+
+That file is placed at the project root (same level as this README).
+
+### Flash via USB mass storage (recommended)
+
+1. Hold `BOOTSEL` on Pico 2W and plug in USB.
+2. Release `BOOTSEL` (drive `RPI-RP2` appears).
+3. Copy UF2:
 
 ```bash
-pio run -e nanoatmega328new -t upload --upload-port /dev/ttyUSB1
+cp .pio/build/pico2w/firmware.uf2 /media/$USER/RPI-RP2/
 ```
 
-## Beginner troubleshooting
+The board reboots automatically and starts the Wi-Fi lamp firmware.
 
-- LEDs do nothing:
-	- Confirm wire goes to LED board `IN` side, not `OUT`
-	- Confirm shared ground (`Nano GND` to LED `GND`)
-	- Confirm `D6` is connected to data input
-- Upload fails with `not in sync`:
-	- Try old bootloader profile (`nanoatmega328` / `ATmega328P (Old Bootloader)`)
-- Port changes from `/dev/ttyUSB0` to `/dev/ttyUSB1`:
-	- Re-select current port and retry
-- Random flicker:
-	- Add the series resistor and `1000µF` capacitor
+---
 
-## Teach-the-basics talking points
+## Configuration used
 
-- **Microcontroller**: small computer repeatedly running your `loop()`.
-- **GPIO pin**: a programmable pin used here to send LED data (`D6`).
-- **Ground reference**: devices need common `GND` to understand signals.
-- **Timing**: animation speed comes from delays (`SPEED_MS`).
-- **Abstraction**: functions like `rainbowCycle()` organize behavior.
+Current project defaults (from `platformio.ini`):
 
-## Project status
+- `LED_PIN=6` (GP6)
+- `LED_COUNT=4`
+- `BRIGHTNESS=230` (~90%)
+- AP SSID = `picoled`
 
-- Firmware compiled and uploaded successfully to Nano in this environment.
-- Working profile used: old Nano bootloader (`nanoatmega328`).
-- Full timeline: `docs/PROJECT_LOG.md`
+---
 
-## Extra docs
+## Prepare for GitHub
 
-- Detailed parts list: `docs/PARTS_LIST.md`
-- Full build log: `docs/PROJECT_LOG.md`
-- GitHub publishing checklist: `docs/GITHUB_PUBLISH_CHECKLIST.md`
+Target repository:
+
+- **Owner:** `danieltone`
+- **Repo name:** `PicoTube-WiFi-Lamp`
+
+### Suggested steps
+
+```bash
+cd /home/kali/pico-rgb-tube
+git init
+git add .
+git commit -m "Initial commit: Pico 2W WiFi lamp with Web UI presets"
+git branch -M main
+git remote add origin git@github.com:danieltone/PicoTube-WiFi-Lamp.git
+git push -u origin main
+```
+
+If you prefer HTTPS:
+
+```bash
+git remote add origin https://github.com/danieltone/PicoTube-WiFi-Lamp.git
+```
+
+---
+
+## Notes
+
+- Upload from PlatformIO task may fail on some systems; UF2 drag-and-drop is the most reliable path.
+- For small 4-LED loads this runs well from a good 5V supply.
+- If you see flicker, confirm shared ground and keep the data resistor/capacitor in place.
