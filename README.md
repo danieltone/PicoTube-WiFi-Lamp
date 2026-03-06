@@ -123,33 +123,6 @@ Current project defaults (from `platformio.ini`):
 
 ---
 
-## Prepare for GitHub
-
-Target repository:
-
-- **Owner:** `danieltone`
-- **Repo name:** `PicoTube-WiFi-Lamp`
-
-### Suggested steps
-
-```bash
-cd /home/kali/pico-rgb-tube
-git init
-git add .
-git commit -m "Initial commit: Pico 2W WiFi lamp with Web UI presets"
-git branch -M main
-git remote add origin git@github.com:danieltone/PicoTube-WiFi-Lamp.git
-git push -u origin main
-```
-
-If you prefer HTTPS:
-
-```bash
-git remote add origin https://github.com/danieltone/PicoTube-WiFi-Lamp.git
-```
-
----
-
 ## Notes
 
 - Upload from PlatformIO task may fail on some systems; UF2 drag-and-drop is the most reliable path.
